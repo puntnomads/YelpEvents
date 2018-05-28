@@ -1,0 +1,145 @@
+import React, { Component, Fragment } from "react";
+import { reduxForm, Field } from "redux-form";
+import {
+  Button,
+  AppBar,
+  Toolbar,
+  Typography,
+  withStyles,
+  Grid
+} from "@material-ui/core";
+import selectField from "../Lib/selectField";
+import textField from "../Lib/textField";
+import { toast } from "react-toastify";
+
+const styles = theme => ({
+  root: {
+    height: "100%"
+  },
+  flex: {
+    flex: 1
+  },
+  body: {
+    height: "100%"
+  },
+  backgroundColor: {
+    backgroundColor: theme.palette.secondary.light
+  },
+  section: {
+    margin: "auto"
+  },
+  button: {
+    margin: theme.spacing.unit * 2
+  },
+  color: {
+    color: "white"
+  }
+});
+
+class Home extends Component {
+  toastId = null;
+  submit = values => {
+    const category = values.category;
+    const location = values.location;
+    if (category && location) {
+      this.props.history.push(
+        `/search?category=${category}&location=${location}`
+      );
+    } else {
+      if (!toast.isActive(this.toastId)) {
+        this.toastId = toast.error("Missing information", {
+          autoClose: 5000
+        });
+      }
+    }
+    console.log(values);
+  };
+  render() {
+    const { classes, handleSubmit } = this.props;
+    return (
+      <Fragment>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.flex}
+            >
+              Yelp Events
+            </Typography>
+            <Button color="inherit">Sign Up</Button>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+        <Grid container className={classes.root}>
+          <Grid
+            item
+            xs={12}
+            className={`${classes.body} ${classes.backgroundColor}`}
+          >
+            <Grid
+              container
+              className={classes.root}
+              spacing={0}
+              justify="center"
+            >
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                className={classes.section}
+                align="center"
+              >
+                <Typography variant="display3" style={{ color: "white" }}>
+                  Welcome to Yelp Events
+                </Typography>
+                <Typography variant="headline" style={{ color: "white" }}>
+                  What event do you want to attend?
+                </Typography>
+                <form onSubmit={handleSubmit(this.submit)}>
+                  <Grid container justify="center">
+                    <Grid item xs={10}>
+                      <Grid container>
+                        <Grid item xs={12} sm={5}>
+                          <Field
+                            name="category"
+                            component={withStyles(styles)(selectField)}
+                            label="Category"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={5}>
+                          <Field
+                            name="location"
+                            component={withStyles(styles)(textField)}
+                            label="Location"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={2}>
+                          <Button
+                            variant="raised"
+                            color="primary"
+                            type="submit"
+                            size="small"
+                            className={classes.button}
+                          >
+                            Go!
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </form>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Fragment>
+    );
+  }
+}
+
+const formed = reduxForm({
+  form: "home"
+})(withStyles(styles)(Home));
+
+export default formed;

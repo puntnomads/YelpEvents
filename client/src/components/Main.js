@@ -5,7 +5,9 @@ import axiosInterceptor from "./Lib/axiosInterceptor";
 import ErrorBoundary from "./Lib/ErrorBoundary";
 import Analytics from "./Lib/Analytics";
 
-class Main extends Component {
+type Props = {};
+
+class Main extends Component<Props> {
   render() {
     return (
       <ErrorBoundary>

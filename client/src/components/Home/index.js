@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { reduxForm, Field } from "redux-form";
+import { reduxForm } from "redux-form";
 import {
   Button,
   AppBar,
@@ -8,9 +8,10 @@ import {
   withStyles,
   Grid
 } from "@material-ui/core";
-import selectField from "../Lib/selectField";
-import textField from "../Lib/textField";
+import SelectField from "../Lib/SelectField";
+import SimpleTextField from "../Lib/SimpleTextField";
 import { toast } from "react-toastify";
+import type { InputProps } from "redux-form";
 
 const styles = theme => ({
   root: {
@@ -36,8 +37,30 @@ const styles = theme => ({
   }
 });
 
-class Home extends Component {
-  toastId = null;
+type Props = {
+  history: any,
+  classes: {
+    root: string,
+    flex: string,
+    body: string,
+    backgroundColor: string,
+    section: string,
+    button: string,
+    color: string
+  },
+  handleSubmit: (x: any) => void,
+  fields: { category: InputProps, location: InputProps }
+};
+
+type State = {
+  category: string
+};
+
+class Home extends Component<Props, State> {
+  state = {
+    category: ""
+  };
+  toastId = 0;
   submit = values => {
     const category = values.category;
     const location = values.location;
@@ -55,7 +78,11 @@ class Home extends Component {
     console.log(values);
   };
   render() {
-    const { classes, handleSubmit } = this.props;
+    const {
+      classes,
+      fields: { category, location },
+      handleSubmit
+    } = this.props;
     return (
       <Fragment>
         <AppBar position="static">
@@ -101,18 +128,22 @@ class Home extends Component {
                     <Grid item xs={10}>
                       <Grid container>
                         <Grid item xs={12} sm={5}>
-                          <Field
-                            name="category"
-                            component={withStyles(styles)(selectField)}
-                            label="Category"
-                          />
+                          <div>
+                            <SelectField
+                              classes={classes}
+                              field={category}
+                              label="Category"
+                            />
+                          </div>
                         </Grid>
                         <Grid item xs={12} sm={5}>
-                          <Field
-                            name="location"
-                            component={withStyles(styles)(textField)}
-                            label="Location"
-                          />
+                          <div>
+                            <SimpleTextField
+                              classes={classes}
+                              field={location}
+                              label="Location"
+                            />
+                          </div>
                         </Grid>
                         <Grid item xs={12} sm={2}>
                           <Button
@@ -139,6 +170,7 @@ class Home extends Component {
 }
 
 const formed = reduxForm({
+  fields: ["category", "location"],
   form: "home"
 })(withStyles(styles)(Home));
 

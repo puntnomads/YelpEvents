@@ -2,24 +2,27 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
+import type { $AxiosXHR } from "axios";
 
-class axiosInterceptor extends Component {
-  toastId = null;
+type Props = {
+  user: any
+};
+
+class axiosInterceptor extends Component<Props> {
+  toastId = 0;
   componentDidMount() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.token) {
-      axios.interceptors.request.use(request => {
-        request.headers.Authorization = user.token;
-        return request;
-      });
+    let user = localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      axios.defaults.headers.common.Authorization = user.token;
     }
-    axios.interceptors.response.use(response => {
-      if (response.data.info) {
+    axios.interceptors.response.use((response: $AxiosXHR<any, any>) => {
+      if (response.data && response.data.info) {
         if (!toast.isActive(this.toastId)) {
           this.toastId = toast.info(response.data.info, { autoClose: 5000 });
         }
       }
-      if (response.data.error) {
+      if (response.data && response.data.error) {
         if (!toast.isActive(this.toastId)) {
           this.toastId = toast.error(response.data.error, { autoClose: 5000 });
         }
@@ -31,10 +34,7 @@ class axiosInterceptor extends Component {
     if (this.props.user && this.props.user.token !== prevProps.user.token) {
       const user = this.props.user;
       localStorage.setItem("user", JSON.stringify(user));
-      axios.interceptors.request.use(request => {
-        request.headers.Authorization = user.token;
-        return request;
-      });
+      axios.defaults.headers.common.Authorization = user.token;
     }
   }
   render() {

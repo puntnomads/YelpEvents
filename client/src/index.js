@@ -3,15 +3,13 @@ import ReactDOM from "react-dom";
 import { applyMiddleware, createStore, compose } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import { Router } from "react-router";
+import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "react-redux-loading-bar";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
 import lightBlue from "@material-ui/core/colors/lightBlue";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import history from "./history";
 import Main from "./components/Main";
 import "./index.css";
 
@@ -41,26 +39,30 @@ const store = createStore(
 
 sagaMiddleware.run(IndexSagas);
 
-ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <Provider store={store}>
-      <Router history={history}>
-        <Fragment>
-          <LoadingBar
-            showFastActions
-            style={{
-              backgroundColor: "red",
-              height: "5px",
-              position: "absolute",
-              zIndex: "1"
-            }}
-          />
-          <ToastContainer />
-          <CssBaseline />
-          <Main />
-        </Fragment>
-      </Router>
-    </Provider>
-  </MuiThemeProvider>,
-  document.getElementById("root")
-);
+const root: ?Element = document.getElementById("root");
+
+if (root != null) {
+  ReactDOM.render(
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Fragment>
+            <LoadingBar
+              showFastActions
+              style={{
+                backgroundColor: "red",
+                height: "5px",
+                position: "absolute",
+                zIndex: "1"
+              }}
+            />
+            <ToastContainer />
+            <CssBaseline />
+            <Main />
+          </Fragment>
+        </BrowserRouter>
+      </Provider>
+    </MuiThemeProvider>,
+    root
+  );
+}

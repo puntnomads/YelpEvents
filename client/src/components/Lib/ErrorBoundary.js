@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import * as React from "react";
+import { Component } from "react";
 import {
   Card,
   CardMedia,
@@ -17,7 +18,18 @@ const styles = {
   }
 };
 
-class ErrorBoundary extends Component {
+type Props = {
+  classes: {
+    card: string,
+    media: string
+  },
+  children?: React.Node
+};
+type State = {
+  hasError: boolean
+};
+
+class ErrorBoundary extends Component<Props, State> {
   state = {
     hasError: false
   };

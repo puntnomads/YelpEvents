@@ -1,34 +1,45 @@
-import React, { Component } from "react";
+import * as React from "react";
+import { Component } from "react";
 import { TextField } from "@material-ui/core";
+import type { InputProps } from "redux-form";
+import Categories from "./Categories";
 
-class selectField extends Component {
+type Props = {
+  classes: {
+    color: string
+  },
+  field: InputProps,
+  label: string
+};
+type State = {
+  category: string
+};
+
+class SelectField extends Component<Props, State> {
   state = {
     category: ""
+  };
+  handleChange = (event: SyntheticInputEvent<any>): void => {
+    this.setState({
+      category: event.target.value
+    });
+    this.props.field.onChange(event.target.value);
   };
   render() {
     const {
       classes,
-      input,
       label,
-      meta: { touched, error },
-      children,
-      ...custom
+      field: { touched, error }
     } = this.props;
     return (
       <TextField
         id="category"
-        select
+        select={true}
         style={{ width: "90%" }}
         label={label}
-        error={touched && error}
+        error={touched && typeof error === "string"}
         value={this.state.category}
-        onChange={event => {
-          console.log();
-          this.setState({
-            category: event.target.value
-          });
-          input.onChange(event.target.value);
-        }}
+        onChange={this.handleChange}
         InputProps={{
           classes: {
             root: classes.color,
@@ -38,39 +49,15 @@ class selectField extends Component {
         InputLabelProps={{
           className: classes.color
         }}
-        {...input}
-        {...custom}
       >
-        <option key="music" value="music">
-          Music
-        </option>
-        <option key="visual-arts" value="visual-arts">
-          Visual Arts
-        </option>
-        <option key="performing-arts" value="performing-arts">
-          Performing Arts
-        </option>
-        <option key="film" value="film">
-          Film
-        </option>
-        <option key="lectures-books" value="lectures-books">
-          Lectures & Books
-        </option>
-        <option key="fashion" value="fashion">
-          Fashion
-        </option>
-        <option key="food-and-drink" value="food-and-drink">
-          Food & Drink
-        </option>
-        <option value="festivals-fairs">Festivals & Fairs</option>
-        <option value="charities">Charities</option>
-        <option value="sports-active-life">Sports & Active Life</option>
-        <option value="nightlife">Nightlife</option>
-        <option value="kids-family">Kids & Family</option>
-        <option value="other">Other</option>
+        {Categories.map(option => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </TextField>
     );
   }
 }
 
-export default selectField;
+export default SelectField;

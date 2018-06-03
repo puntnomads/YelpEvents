@@ -12,10 +12,10 @@ export const searchYelp = function searchYelp(query: string): searchYelpAction {
   };
 };
 
-export const searchYelpSuccess = function searchYelpSuccess(result: Object) {
+export const searchYelpSuccess = function searchYelpSuccess(results: Object) {
   return {
     type: SEARCH_YELP_SUCCESS,
-    result
+    results
   };
 };
 

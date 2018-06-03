@@ -1,4 +1,5 @@
 const AuthenticationController = require("./controllers/authentication"),
+  ApiController = require("./controllers/api"),
   express = require("express"),
   path = require("path"),
   passportService = require("./config/passport"),
@@ -21,9 +22,10 @@ module.exports = function(app) {
   authRoutes.post("/login", requireLogin, AuthenticationController.login);
 
   app.use("/api", apiRoutes);
+  apiRoutes.get("/search", ApiController.searchYelp);
 
   app.get("*", function(req, res) {
-    res.sendFile(path.resolve(__dirname + "/client/build/index.html"));
+    res.sendFile(path.resolve(__dirname + "/../client/build/index.html"));
   });
 
   // errors from controller functions are received here.

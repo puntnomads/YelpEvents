@@ -8,7 +8,7 @@ import type { ResultsState } from "./types";
 type State = ResultsState;
 
 const initialState = {
-  results: {},
+  results: [],
   requesting: false,
   successful: false,
   messages: [],

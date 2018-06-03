@@ -5,5 +5,6 @@ module.exports = {
   email_user: process.env.EMAIL_USER,
   email_password: process.env.EMAIL_PASSWORD,
   siteKey: process.env.SITE_KEY,
-  secretKey: process.env.SECRET_KEY
+  secretKey: process.env.SECRET_KEY,
+  yelpAPIKey: process.env.YELP_API_KEY
 };

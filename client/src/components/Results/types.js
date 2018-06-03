@@ -4,7 +4,7 @@ export type searchYelpAction = {
 };
 
 export type ResultsState = {
-  results: Object,
+  results: Array<Object>,
   requesting: boolean,
   successful: boolean,
   messages: Array<{

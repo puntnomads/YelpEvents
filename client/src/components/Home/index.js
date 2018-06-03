@@ -38,7 +38,7 @@ const styles = theme => ({
 });
 
 type Props = {
-  history: any,
+  history: Object,
   classes: {
     root: string,
     flex: string,

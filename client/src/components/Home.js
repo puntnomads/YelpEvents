@@ -1,15 +1,10 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { reduxForm } from "redux-form";
-import {
-  Button,
-  AppBar,
-  Toolbar,
-  Typography,
-  withStyles,
-  Grid
-} from "@material-ui/core";
-import SelectField from "../Lib/SelectField";
-import SimpleTextField from "../Lib/SimpleTextField";
+import { Button, Typography, withStyles, Grid } from "@material-ui/core";
+import ErrorBoundary from "./Lib/ErrorBoundary";
+import NavBar from "./NavBar";
+import SelectField from "./Lib/SelectField";
+import SimpleTextField from "./Lib/SimpleTextField";
 import { toast } from "react-toastify";
 import type { InputProps } from "redux-form";
 
@@ -41,7 +36,6 @@ type Props = {
   history: Object,
   classes: {
     root: string,
-    flex: string,
     body: string,
     backgroundColor: string,
     section: string,
@@ -84,20 +78,8 @@ class Home extends Component<Props, State> {
       handleSubmit
     } = this.props;
     return (
-      <Fragment>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography
-              variant="title"
-              color="inherit"
-              className={classes.flex}
-            >
-              Yelp Events
-            </Typography>
-            <Button color="inherit">Sign Up</Button>
-            <Button color="inherit">Login</Button>
-          </Toolbar>
-        </AppBar>
+      <ErrorBoundary>
+        <NavBar />
         <Grid container className={classes.root}>
           <Grid
             item
@@ -164,7 +146,7 @@ class Home extends Component<Props, State> {
             </Grid>
           </Grid>
         </Grid>
-      </Fragment>
+      </ErrorBoundary>
     );
   }
 }

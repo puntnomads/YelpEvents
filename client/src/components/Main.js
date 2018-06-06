@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./Home";
+import Home from "./Home.js";
 import Results from "./Results";
 import axiosInterceptor from "./Lib/axiosInterceptor";
 import ErrorBoundary from "./Lib/ErrorBoundary";

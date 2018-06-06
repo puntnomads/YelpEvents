@@ -23,19 +23,14 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     position: "relative",
     overflow: "auto",
-    maxHeight: "100vh"
-  },
-  media: {
-    height: 0,
-    paddingTop: "110%"
+    maxHeight: 500
   }
 });
 
 type Props = {
   history: Object,
   classes: {
-    root: string,
-    media: string
+    root: string
   },
   location: Object,
   match: Object,
@@ -65,11 +60,7 @@ class Results extends Component<Props> {
                   <Card>
                     <Grid container>
                       <Grid item xs={4}>
-                        <CardMedia
-                          className={classes.media}
-                          image={image_url}
-                          title="image"
-                        />
+                        <CardMedia image={image_url} title="image" />
                       </Grid>
                       <Grid item xs={8}>
                         <CardContent>
@@ -84,10 +75,10 @@ class Results extends Component<Props> {
                         </CardContent>
                         <CardActions>
                           <Button size="small" color="primary">
-                            Going
+                            Share
                           </Button>
                           <Button size="small" color="primary">
-                            Zoom
+                            Learn More
                           </Button>
                         </CardActions>
                       </Grid>
@@ -98,7 +89,7 @@ class Results extends Component<Props> {
             </List>
           </Grid>
           <Grid item xs={12} sm={7}>
-            <h1>Google Maps</h1>
+            <h1>Hello</h1>
           </Grid>
         </Grid>
       </ErrorBoundary>

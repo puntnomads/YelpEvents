@@ -16,6 +16,7 @@ import NavBar from "../NavBar.js";
 import type { ResultsState } from "./types";
 import { searchYelp } from "./actions";
 import ErrorBoundary from "../Lib/ErrorBoundary";
+import MapWithAMarkerClusterer from "../Lib/MapWithAMarkerClusterer";
 
 const styles = theme => ({
   root: {
@@ -54,6 +55,14 @@ class Results extends Component<Props> {
       results: { results }
     } = this.props;
     console.log(results);
+    const markers = results.map(result => {
+      return {
+        id: result.id,
+        latitude: result.latitude,
+        longitude: result.longitude
+      };
+    });
+    console.log(markers);
     return (
       <ErrorBoundary>
         <NavBar />
@@ -98,7 +107,9 @@ class Results extends Component<Props> {
             </List>
           </Grid>
           <Grid item xs={12} sm={7}>
-            <h1>Google Maps</h1>
+            {markers.length > 0 && (
+              <MapWithAMarkerClusterer markers={markers} />
+            )}
           </Grid>
         </Grid>
       </ErrorBoundary>
@@ -116,3 +127,5 @@ const connected = connect(
 )(withStyles(styles)(Results));
 
 export default connected;
+
+// https://tomchentw.github.io/react-google-maps/#introduction

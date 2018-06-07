@@ -16,7 +16,7 @@ import NavBar from "../NavBar.js";
 import type { ResultsState } from "./types";
 import { searchYelp } from "./actions";
 import ErrorBoundary from "../Lib/ErrorBoundary";
-import MapWithAMarkerClusterer from "../Lib/MapWithAMarkerClusterer";
+import MapWithMarkers from "../Lib/MapWithMarkers";
 
 const styles = theme => ({
   root: {
@@ -44,71 +44,98 @@ type Props = {
   searchYelp: Function
 };
 
-class Results extends Component<Props> {
+type State = {
+  markers: Array<{
+    id: number,
+    latitude: number,
+    longitude: number
+  }>,
+  zoomToMarker: number
+};
+
+class Results extends Component<Props, State> {
+  state = {
+    markers: [],
+    zoomToMarker: -1
+  };
   componentDidMount() {
     const query = this.props.location.search;
     this.props.searchYelp(query);
   }
-  render() {
-    const {
-      classes,
-      results: { results }
-    } = this.props;
-    console.log(results);
-    const markers = results.map(result => {
+  static getDerivedStateFromProps(props, state) {
+    const markers = props.results.results.map(result => {
       return {
         id: result.id,
         latitude: result.latitude,
         longitude: result.longitude
       };
     });
-    console.log(markers);
+    return {
+      markers: markers
+    };
+  }
+  render() {
+    const {
+      classes,
+      results: { results }
+    } = this.props;
+    const { markers, zoomToMarker } = this.state;
     return (
       <ErrorBoundary>
         <NavBar />
         <Grid container>
           <Grid item xs={12} sm={5}>
             <List className={classes.root}>
-              {results.map(({ id, name, image_url, description }) => (
-                <li key={`section-${id}`}>
-                  <Card>
-                    <Grid container>
-                      <Grid item xs={4}>
-                        <CardMedia
-                          className={classes.media}
-                          image={image_url}
-                          title="image"
-                        />
+              {results.map(({ id, name, image_url, description }, index) => {
+                return (
+                  <li key={id}>
+                    <Card>
+                      <Grid container>
+                        <Grid item xs={4}>
+                          <CardMedia
+                            className={classes.media}
+                            image={image_url}
+                            title="image"
+                          />
+                        </Grid>
+                        <Grid item xs={8}>
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="headline"
+                              component="h2"
+                            >
+                              {name}
+                            </Typography>
+                            <Typography component="p">{description}</Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button size="small" color="primary">
+                              Going
+                            </Button>
+                            <Button
+                              size="small"
+                              color="primary"
+                              onClick={() => {
+                                this.setState({
+                                  zoomToMarker: index
+                                });
+                              }}
+                            >
+                              Zoom
+                            </Button>
+                          </CardActions>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={8}>
-                        <CardContent>
-                          <Typography
-                            gutterBottom
-                            variant="headline"
-                            component="h2"
-                          >
-                            {name}
-                          </Typography>
-                          <Typography component="p">{description}</Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button size="small" color="primary">
-                            Going
-                          </Button>
-                          <Button size="small" color="primary">
-                            Zoom
-                          </Button>
-                        </CardActions>
-                      </Grid>
-                    </Grid>
-                  </Card>
-                </li>
-              ))}
+                    </Card>
+                  </li>
+                );
+              })}
             </List>
           </Grid>
           <Grid item xs={12} sm={7}>
             {markers.length > 0 && (
-              <MapWithAMarkerClusterer markers={markers} />
+              <MapWithMarkers zoomToMarker={zoomToMarker} markers={markers} />
             )}
           </Grid>
         </Grid>
@@ -127,5 +154,3 @@ const connected = connect(
 )(withStyles(styles)(Results));
 
 export default connected;
-
-// https://tomchentw.github.io/react-google-maps/#introduction

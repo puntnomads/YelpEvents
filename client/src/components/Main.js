@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 import Home from "./Home.js";
 import Results from "./Results";
+import Login from "./Login";
 import axiosInterceptor from "./Lib/axiosInterceptor";
 import ErrorBoundary from "./Lib/ErrorBoundary";
 import Analytics from "./Lib/Analytics";
@@ -18,6 +19,7 @@ class Main extends Component<Props> {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/search" component={Results} />
+            <Route exact path="/login" component={Login} />
             <Route
               render={function() {
                 return <p>Not Found</p>;

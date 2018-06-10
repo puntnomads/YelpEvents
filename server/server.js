@@ -5,7 +5,8 @@ const path = require("path"),
   bodyParser = require("body-parser"),
   router = require("./router"),
   mongoose = require("mongoose"),
-  config = require("./config/main");
+  passport = require("passport");
+config = require("./config/main");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
@@ -18,6 +19,8 @@ console.log("Your server is running on port " + config.port + ".");
 app.use(express.static(path.join(__dirname, "./client/build")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(passport.initialize());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

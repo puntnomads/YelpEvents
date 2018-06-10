@@ -21,6 +21,11 @@ module.exports = function(app) {
     AuthenticationController.resetPassword
   );
   authRoutes.post("/login", requireLogin, AuthenticationController.login);
+  authRoutes.post(
+    "/google",
+    passport.authenticate("google-token"),
+    AuthenticationController.login
+  );
 
   app.use("/api", apiRoutes);
   apiRoutes.get("/search", ApiController.searchYelp);

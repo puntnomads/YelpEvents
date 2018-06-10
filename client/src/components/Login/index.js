@@ -4,11 +4,12 @@ import { connect } from "react-redux";
 import { Button, Typography, withStyles, Grid, Card } from "@material-ui/core";
 import { toast } from "react-toastify";
 import queryString from "query-string";
+import { GoogleLogin } from "react-google-login";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import NavBar from "../NavBar";
 import FormTextField from "../Lib/FormTextField";
-import { loginRequest, confirmUserEmail } from "./actions";
-import type { LoginState, LoginValues, TokenValues } from "./types";
+import { loginRequest, googleLoginRequest, confirmUserEmail } from "./actions";
+import type { LoginState, LoginValues } from "./types";
 import type { InputProps } from "redux-form";
 
 const styles = theme => ({
@@ -46,13 +47,29 @@ const styles = theme => ({
   },
   button: {
     marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 12,
+    marginBottom: theme.spacing.unit * 4,
     width: "70%"
   },
   color: {
     color: "black"
   }
 });
+
+const googleButton = {
+  display: "inline-block",
+  background: "rgb(209, 72, 54)",
+  color: "rgb(255, 255, 255)",
+  paddingTop: "10px",
+  paddingBottom: "10px",
+  borderRadius: "2px",
+  border: "1px solid transparent",
+  fontsize: "16px",
+  fontWeight: "bold",
+  fontFamily: "Roboto",
+  fontSize: "16px",
+  width: "70%",
+  marginBottom: "32px"
+};
 
 type Props = {
   history: Object,
@@ -71,6 +88,7 @@ type Props = {
   match: Object,
   login: LoginState,
   loginRequest: Function,
+  googleLoginRequest: Function,
   confirmUserEmail: Function,
   handleSubmit: (x: any) => void,
   fields: { email: InputProps, password: InputProps }
@@ -96,6 +114,16 @@ class Login extends Component<Props> {
   }
   submit = (values: LoginValues) => {
     this.props.loginRequest(values);
+  };
+  onFailure = error => {
+    alert(error);
+  };
+  googleResponse = response => {
+    const values = new Blob(
+      [JSON.stringify({ access_token: response.accessToken }, null, 2)],
+      { type: "application/json" }
+    );
+    this.props.googleLoginRequest(values);
   };
   render() {
     const {
@@ -153,6 +181,13 @@ class Login extends Component<Props> {
                       Login
                     </Button>
                   </form>
+                  <GoogleLogin
+                    clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
+                    buttonText="Login with Google"
+                    style={googleButton}
+                    onSuccess={this.googleResponse}
+                    onFailure={this.onFailure}
+                  />
                 </Card>
               </Grid>
             </Grid>
@@ -169,7 +204,7 @@ const mapStateToProps = state => ({
 
 const connected = connect(
   mapStateToProps,
-  { loginRequest, confirmUserEmail }
+  { loginRequest, googleLoginRequest, confirmUserEmail }
 )(withStyles(styles)(Login));
 
 const formed = reduxForm({

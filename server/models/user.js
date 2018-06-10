@@ -11,13 +11,10 @@ const UserSchema = new Schema(
     email: {
       type: String,
       lowercase: true,
-      unique: true,
-      required: true
+      unique: true
     },
-    password: {
-      type: String,
-      required: true
-    },
+    password: { type: String },
+    googleID: { type: String },
     isVerified: {
       type: Boolean,
       default: false

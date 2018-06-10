@@ -40,11 +40,6 @@ const setUserInfo = user => {
 };
 
 exports.login = (req, res, next) => {
-  if (!req.user.isVerified) {
-    return res.send({
-      error: "Your email has not been verified."
-    });
-  }
   let userInfo = setUserInfo(req.user);
   res.json({
     token: "JWT " + generateToken(userInfo),

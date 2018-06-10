@@ -46,6 +46,9 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-const connected = connect(mapStateToProps, {})(axiosInterceptor);
+const connected = connect(
+  mapStateToProps,
+  {}
+)(axiosInterceptor);
 
 export default connected;

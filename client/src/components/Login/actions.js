@@ -1,11 +1,25 @@
-import { LOGIN_REQUESTING } from "./constants";
-import type { Values, LoginRequest } from "./types";
+import { LOGIN_REQUESTING, CONFIRM_USER_EMAIL_REQUESTING } from "./constants";
+import type {
+  LoginValues,
+  TokenValues,
+  LoginRequest,
+  ConfirmUserEmailRequest
+} from "./types";
 
-const loginRequest = function loginRequest(values: Values): LoginRequest {
+export const loginRequest = function loginRequest(
+  values: LoginValues
+): LoginRequest {
   return {
     type: LOGIN_REQUESTING,
     values
   };
 };
 
-export default loginRequest;
+export const confirmUserEmail = function loginRequest(
+  values: TokenValues
+): ConfirmUserEmailRequest {
+  return {
+    type: CONFIRM_USER_EMAIL_REQUESTING,
+    values
+  };
+};

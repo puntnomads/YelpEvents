@@ -1,13 +1,9 @@
-export type LoginValues = {
+export type Values = {
   email: string,
   password: string
 };
 
-export type TokenValues = {
-  token: string
-};
-
-export type LoginRequest = {
+export type SignUpRequest = {
   type: string,
   values: {
     email: string,
@@ -15,14 +11,7 @@ export type LoginRequest = {
   }
 };
 
-export type ConfirmUserEmailRequest = {
-  type: string,
-  values: {
-    token: string
-  }
-};
-
-export type LoginState = {
+export type SignUpState = {
   requesting: boolean,
   successful: boolean,
   messages: Array<{

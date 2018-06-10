@@ -13,7 +13,8 @@ module.exports = function(app) {
     authRoutes = express.Router();
 
   apiRoutes.use("/auth", authRoutes);
-  authRoutes.post("/register", AuthenticationController.register);
+  authRoutes.post("/signup", AuthenticationController.register);
+  authRoutes.post("/confirmation", AuthenticationController.confirmation);
   authRoutes.post("/forgot-password", AuthenticationController.forgotPassword);
   authRoutes.post(
     "/reset-password/:token",

@@ -1,7 +1,11 @@
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from "./constants";
-import type { LoginState } from "./types";
+import {
+  SIGN_UP_REQUESTING,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_ERROR
+} from "./constants";
+import type { SignUpState } from "./types";
 
-type State = LoginState;
+type State = SignUpState;
 
 const initialState = {
   requesting: false,
@@ -10,35 +14,42 @@ const initialState = {
   errors: []
 };
 
-const reducer = function loginReducer(
+const reducer = function signUpReducer(
   state: State = initialState,
   action: Object
 ): State {
   switch (action.type) {
-    case LOGIN_REQUESTING:
+    case SIGN_UP_REQUESTING:
       return {
         ...state,
         requesting: true,
         successful: false,
-        messages: [{ body: "Logging in...", time: new Date() }],
+        messages: [{ body: "Signing up...", time: new Date() }],
         errors: []
       };
 
-    case LOGIN_SUCCESS:
+    case SIGN_UP_SUCCESS:
       return {
         ...state,
         errors: [],
-        messages: [],
+        messages: [
+          {
+            body: `Successfully created account for ${
+              action.response.data.user.email
+            }`,
+            time: new Date()
+          }
+        ],
         requesting: false,
         successful: true
       };
 
-    case LOGIN_ERROR:
+    case SIGN_UP_ERROR:
       return {
         ...state,
         errors: state.errors.concat([
           {
-            body: action.error,
+            body: action.error.response.data.error,
             time: new Date()
           }
         ]),

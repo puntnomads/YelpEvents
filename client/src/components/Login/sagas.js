@@ -3,16 +3,37 @@ import { showLoading, hideLoading } from "react-redux-loading-bar";
 import axios from "axios";
 //import history from "../../history";
 import type { Saga } from "redux-saga";
-import type { LoginRequest, Values } from "./types";
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from "./constants";
+import type {
+  LoginRequest,
+  ConfirmUserEmailRequest,
+  LoginValues,
+  TokenValues
+} from "./types";
+import {
+  LOGIN_REQUESTING,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  CONFIRM_USER_EMAIL_REQUESTING
+} from "./constants";
 import { setUser } from "../User/actions";
 
-const instance = axios.create();
 const loginUrl = "/api/auth/login";
+const confirmUserEmailUrl = "/api/auth/confirmation";
 
-function loginApi(values: Values) {
-  return instance
+function loginApi(values: LoginValues) {
+  return axios
     .post(loginUrl, values)
+    .then(function(response) {
+      return response.data;
+    })
+    .catch(function(error) {
+      throw error;
+    });
+}
+
+function confirmUserEmailApi(values: TokenValues) {
+  return axios
+    .post(confirmUserEmailUrl, values)
     .then(function(response) {
       return response.data;
     })
@@ -35,8 +56,19 @@ function* loginFlow(action: LoginRequest): Saga<void> {
   }
 }
 
+function* confirmUserEmailFlow(action: ConfirmUserEmailRequest): Saga<void> {
+  try {
+    yield put(showLoading());
+    yield call(confirmUserEmailApi, action.values);
+    yield put(hideLoading());
+  } catch (error) {
+    yield put(hideLoading());
+  }
+}
+
 function* loginWatcher(): any {
   yield takeEvery(LOGIN_REQUESTING, loginFlow);
+  yield takeEvery(CONFIRM_USER_EMAIL_REQUESTING, confirmUserEmailFlow);
 }
 
 export default loginWatcher;

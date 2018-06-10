@@ -3,12 +3,11 @@ import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { Button, Typography, withStyles, Grid, Card } from "@material-ui/core";
 import { toast } from "react-toastify";
-import queryString from "query-string";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import NavBar from "../NavBar";
 import FormTextField from "../Lib/FormTextField";
-import { loginRequest, confirmUserEmail } from "./actions";
-import type { LoginState, LoginValues, TokenValues } from "./types";
+import signUpRequest from "./actions";
+import type { SignUpState, Values } from "./types";
 import type { InputProps } from "redux-form";
 
 const styles = theme => ({
@@ -29,10 +28,10 @@ const styles = theme => ({
     margin: "auto"
   },
   card: {
-    marginTop: "-20%"
+    marginTop: "-15%"
   },
   heading: {
-    padding: "48px",
+    padding: theme.spacing.unit * 2,
     marginTop: "16px",
     marginBottom: "-16px",
     color: "black"
@@ -46,7 +45,7 @@ const styles = theme => ({
   },
   button: {
     marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 12,
+    marginBottom: theme.spacing.unit * 10,
     width: "70%"
   },
   color: {
@@ -69,38 +68,32 @@ type Props = {
   },
   location: Object,
   match: Object,
-  login: LoginState,
-  loginRequest: Function,
-  confirmUserEmail: Function,
+  signUp: SignUpState,
+  signUpRequest: Function,
   handleSubmit: (x: any) => void,
-  fields: { email: InputProps, password: InputProps }
+  fields: { name: InputProps, email: InputProps, password: InputProps }
 };
 
-class Login extends Component<Props> {
+class SignUp extends Component<Props> {
   toastId = 0;
-  componentDidMount() {
-    const token = queryString.parse(this.props.location.search).token;
-    if (token) {
-      this.props.confirmUserEmail({ token });
-    }
-  }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!this.props.login.requesting && !!this.props.login.errors.length) {
+    if (
+      !this.props.signUp.requesting &&
+      !this.props.signUp.successful &&
+      this.props.signUp.errors.length > 0
+    ) {
       if (!toast.isActive(this.toastId)) {
-        this.toastId = toast.error(
-          "Failed to login in. Please insure that you are registered and your details are correct.",
-          { autoClose: 5000 }
-        );
+        this.toastId = toast.error("Failed to sign up.", { autoClose: 5000 });
       }
     }
   }
-  submit = (values: LoginValues) => {
-    this.props.loginRequest(values);
+  submit = (values: Values) => {
+    this.props.signUpRequest(values);
   };
   render() {
     const {
       classes,
-      fields: { email, password },
+      fields: { name, email, password },
       handleSubmit
     } = this.props;
     return (
@@ -129,8 +122,14 @@ class Login extends Component<Props> {
                 <Card className={classes.card}>
                   <form onSubmit={handleSubmit(this.submit)}>
                     <Typography variant="display1" className={classes.heading}>
-                      Login
+                      Sign Up
                     </Typography>
+                    <FormTextField
+                      classes={classes}
+                      field={name}
+                      label="Name"
+                      type="name"
+                    />
                     <FormTextField
                       classes={classes}
                       field={email}
@@ -150,7 +149,7 @@ class Login extends Component<Props> {
                       size="large"
                       className={classes.button}
                     >
-                      Login
+                      Sign Up
                     </Button>
                   </form>
                 </Card>
@@ -164,17 +163,17 @@ class Login extends Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  login: state.login
+  signUp: state.signUp
 });
 
 const connected = connect(
   mapStateToProps,
-  { loginRequest, confirmUserEmail }
-)(withStyles(styles)(Login));
+  { signUpRequest }
+)(withStyles(styles)(SignUp));
 
 const formed = reduxForm({
-  fields: ["email", "password"],
-  form: "login"
+  fields: ["name", "email", "password"],
+  form: "signUp"
 })(connected);
 
 export default formed;

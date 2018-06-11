@@ -26,6 +26,13 @@ module.exports = function(app) {
     passport.authenticate("google-token"),
     AuthenticationController.login
   );
+  authRoutes.post("/twitter/reverse", AuthenticationController.twitterReverse);
+  authRoutes.post(
+    "/twitter",
+    AuthenticationController.twitter,
+    passport.authenticate("twitter-token"),
+    AuthenticationController.login
+  );
 
   app.use("/api", apiRoutes);
   apiRoutes.get("/search", ApiController.searchYelp);

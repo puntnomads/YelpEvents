@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken"),
+  request = require("request-promise"),
   crypto = require("crypto"),
   sgMail = require("@sendgrid/mail"),
   reCAPTCHA = require("recaptcha2"),
@@ -163,4 +164,37 @@ exports.resetPassword = async (req, res, next) => {
   res.json({
     info: "Password changed successfully. Please login with your new password."
   });
+};
+
+exports.twitterReverse = async (req, res, next) => {
+  const body = await request.post({
+    url: "https://api.twitter.com/oauth/request_token",
+    method: "post",
+    oauth: {
+      consumer_key: config.twitter.consumerKey,
+      consumer_secret: config.twitter.consumerSecret
+    }
+  });
+  var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+  res.send(JSON.parse(jsonStr));
+};
+
+exports.twitter = async (req, res, next) => {
+  const body = await request.post({
+    url: `https://api.twitter.com/oauth/access_token?oauth_verifier`,
+    method: "post",
+    oauth: {
+      consumer_key: config.twitter.consumerKey,
+      consumer_secret: config.twitter.consumerSecret,
+      token: req.query.oauth_token
+    },
+    form: { oauth_verifier: req.query.oauth_verifier }
+  });
+  const bodyString =
+    '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+  const parsedBody = JSON.parse(bodyString);
+  req.body["oauth_token"] = parsedBody.oauth_token;
+  req.body["oauth_token_secret"] = parsedBody.oauth_token_secret;
+  req.body["user_id"] = parsedBody.user_id;
+  next();
 };

@@ -15,6 +15,7 @@ const UserSchema = new Schema(
     },
     password: { type: String },
     googleID: { type: String },
+    twitterID: { type: String },
     isVerified: {
       type: Boolean,
       default: false

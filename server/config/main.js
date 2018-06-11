@@ -9,5 +9,9 @@ module.exports = {
   google: {
     clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
     clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET
+  },
+  twitter: {
+    consumerKey: process.env.TWITTER_AUTH_CONSUMER_KEY,
+    consumerSecret: process.env.TWITTER_AUTH_CONSUMER_SECRET
   }
 };

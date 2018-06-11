@@ -4,7 +4,8 @@ const passport = require("passport"),
   JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt,
   LocalStrategy = require("passport-local"),
-  GoogleTokenStrategy = require("passport-google-token").Strategy;
+  GoogleTokenStrategy = require("passport-google-token").Strategy,
+  TwitterTokenStrategy = require("passport-twitter-token");
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -87,6 +88,33 @@ const googleStrategy = new GoogleTokenStrategy(
   }
 );
 
+const twitterStrategy = new TwitterTokenStrategy(
+  {
+    consumerKey: config.twitter.consumerKey,
+    consumerSecret: config.twitter.consumerSecret,
+    includeEmail: true
+  },
+  async (token, tokenSecret, profile, done) => {
+    try {
+      const existingUser = await User.findOne({ twitterID: profile.id });
+      if (existingUser) {
+        done(null, existingUser);
+      } else {
+        const user = new User({
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          twitterID: profile.id
+        });
+        const newUser = await user.save();
+        done(null, newUser);
+      }
+    } catch (error) {
+      done(error);
+    }
+  }
+);
+
 passport.use(jwtLogin);
 passport.use(localLogin);
 passport.use(googleStrategy);
+passport.use(twitterStrategy);

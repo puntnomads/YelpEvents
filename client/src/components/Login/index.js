@@ -5,10 +5,12 @@ import { Button, Typography, withStyles, Grid, Card } from "@material-ui/core";
 import { toast } from "react-toastify";
 import queryString from "query-string";
 import { GoogleLogin } from "react-google-login";
+import TwitterLogin from "react-twitter-auth";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import NavBar from "../NavBar";
 import FormTextField from "../Lib/FormTextField";
 import { loginRequest, googleLoginRequest, confirmUserEmail } from "./actions";
+import { setUser } from "../User/actions";
 import type { LoginState, LoginValues } from "./types";
 import type { InputProps } from "redux-form";
 
@@ -57,7 +59,23 @@ const styles = theme => ({
 
 const googleButton = {
   display: "inline-block",
-  background: "rgb(209, 72, 54)",
+  background: "#dd4b39",
+  color: "rgb(255, 255, 255)",
+  paddingTop: "10px",
+  paddingBottom: "10px",
+  borderRadius: "2px",
+  border: "1px solid transparent",
+  fontsize: "16px",
+  fontWeight: "bold",
+  fontFamily: "Roboto",
+  fontSize: "16px",
+  width: "70%",
+  marginBottom: "32px"
+};
+
+const twitterButton = {
+  display: "inline-block",
+  background: "#55acee",
   color: "rgb(255, 255, 255)",
   paddingTop: "10px",
   paddingBottom: "10px",
@@ -90,6 +108,7 @@ type Props = {
   loginRequest: Function,
   googleLoginRequest: Function,
   confirmUserEmail: Function,
+  setUser: Function,
   handleSubmit: (x: any) => void,
   fields: { email: InputProps, password: InputProps }
 };
@@ -124,6 +143,11 @@ class Login extends Component<Props> {
       { type: "application/json" }
     );
     this.props.googleLoginRequest(values);
+  };
+  twitterResponse = response => {
+    response.json().then(response => {
+      this.props.setUser(response);
+    });
   };
   render() {
     const {
@@ -181,12 +205,20 @@ class Login extends Component<Props> {
                       Login
                     </Button>
                   </form>
+                  <TwitterLogin
+                    loginUrl="/api/auth/twitter"
+                    requestTokenUrl="/api/auth/twitter/reverse"
+                    onSuccess={this.twitterResponse}
+                    onFailure={this.onFailure}
+                    style={twitterButton}
+                    showIcon={false}
+                  />
                   <GoogleLogin
                     clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
-                    buttonText="Login with Google"
-                    style={googleButton}
+                    buttonText="Login with Google+"
                     onSuccess={this.googleResponse}
                     onFailure={this.onFailure}
+                    style={googleButton}
                   />
                 </Card>
               </Grid>
@@ -204,7 +236,7 @@ const mapStateToProps = state => ({
 
 const connected = connect(
   mapStateToProps,
-  { loginRequest, googleLoginRequest, confirmUserEmail }
+  { loginRequest, googleLoginRequest, confirmUserEmail, setUser }
 )(withStyles(styles)(Login));
 
 const formed = reduxForm({

@@ -13,5 +13,9 @@ module.exports = {
   twitter: {
     consumerKey: process.env.TWITTER_AUTH_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_AUTH_CONSUMER_SECRET
+  },
+  facebook: {
+    clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
+    clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET
   }
 };

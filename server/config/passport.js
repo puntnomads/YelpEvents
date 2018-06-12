@@ -5,7 +5,8 @@ const passport = require("passport"),
   ExtractJwt = require("passport-jwt").ExtractJwt,
   LocalStrategy = require("passport-local"),
   GoogleTokenStrategy = require("passport-google-token").Strategy,
-  TwitterTokenStrategy = require("passport-twitter-token");
+  TwitterTokenStrategy = require("passport-twitter-token"),
+  FacebookTokenStrategy = require("passport-facebook-token");
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -114,7 +115,33 @@ const twitterStrategy = new TwitterTokenStrategy(
   }
 );
 
+const facebookStrategy = new FacebookTokenStrategy(
+  {
+    clientID: config.facebook.clientID,
+    clientSecret: config.facebook.clientSecret
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      const existingUser = await User.findOne({ facebookID: profile.id });
+      if (existingUser) {
+        done(null, existingUser);
+      } else {
+        const user = new User({
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          facebookID: profile.id
+        });
+        const newUser = await user.save();
+        done(null, newUser);
+      }
+    } catch (error) {
+      done(error);
+    }
+  }
+);
+
 passport.use(jwtLogin);
 passport.use(localLogin);
 passport.use(googleStrategy);
 passport.use(twitterStrategy);
+passport.use(facebookStrategy);

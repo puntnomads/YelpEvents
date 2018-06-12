@@ -6,10 +6,16 @@ import { toast } from "react-toastify";
 import queryString from "query-string";
 import { GoogleLogin } from "react-google-login";
 import TwitterLogin from "react-twitter-auth";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import NavBar from "../NavBar";
 import FormTextField from "../Lib/FormTextField";
-import { loginRequest, googleLoginRequest, confirmUserEmail } from "./actions";
+import {
+  loginRequest,
+  googleLoginRequest,
+  facebookLoginRequest,
+  confirmUserEmail
+} from "./actions";
 import { setUser } from "../User/actions";
 import type { LoginState, LoginValues } from "./types";
 import type { InputProps } from "redux-form";
@@ -35,14 +41,14 @@ const styles = theme => ({
     marginTop: "-20%"
   },
   heading: {
-    padding: "48px",
+    padding: "16px",
     marginTop: "16px",
     marginBottom: "-16px",
     color: "black"
   },
   textField: {
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
     marginLeft: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit * 2,
     width: "70%"
@@ -70,7 +76,7 @@ const googleButton = {
   fontFamily: "Roboto",
   fontSize: "16px",
   width: "70%",
-  marginBottom: "32px"
+  marginTop: "16px"
 };
 
 const twitterButton = {
@@ -86,7 +92,24 @@ const twitterButton = {
   fontFamily: "Roboto",
   fontSize: "16px",
   width: "70%",
-  marginBottom: "32px"
+  marginBottom: "32px",
+  marginTop: "16px"
+};
+
+const facebookButton = {
+  display: "inline-block",
+  background: "#3b5998",
+  color: "rgb(255, 255, 255)",
+  paddingTop: "10px",
+  paddingBottom: "10px",
+  borderRadius: "2px",
+  border: "1px solid transparent",
+  fontsize: "16px",
+  fontWeight: "bold",
+  fontFamily: "Roboto",
+  fontSize: "16px",
+  width: "70%",
+  marginTop: "32px"
 };
 
 type Props = {
@@ -107,6 +130,7 @@ type Props = {
   login: LoginState,
   loginRequest: Function,
   googleLoginRequest: Function,
+  facebookLoginRequest: Function,
   confirmUserEmail: Function,
   setUser: Function,
   handleSubmit: (x: any) => void,
@@ -148,6 +172,13 @@ class Login extends Component<Props> {
     response.json().then(response => {
       this.props.setUser(response);
     });
+  };
+  facebookResponse = response => {
+    const values = new Blob(
+      [JSON.stringify({ access_token: response.accessToken }, null, 2)],
+      { type: "application/json" }
+    );
+    this.props.facebookLoginRequest(values);
   };
   render() {
     const {
@@ -205,13 +236,17 @@ class Login extends Component<Props> {
                       Login
                     </Button>
                   </form>
-                  <TwitterLogin
-                    loginUrl="/api/auth/twitter"
-                    requestTokenUrl="/api/auth/twitter/reverse"
-                    onSuccess={this.twitterResponse}
-                    onFailure={this.onFailure}
-                    style={twitterButton}
-                    showIcon={false}
+                  <hr />
+                  <FacebookLogin
+                    appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                    autoLoad={false}
+                    fields="name,email"
+                    callback={this.facebookResponse}
+                    render={renderProps => (
+                      <button style={facebookButton}>
+                        Login with Facebook
+                      </button>
+                    )}
                   />
                   <GoogleLogin
                     clientId={process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}
@@ -219,6 +254,14 @@ class Login extends Component<Props> {
                     onSuccess={this.googleResponse}
                     onFailure={this.onFailure}
                     style={googleButton}
+                  />
+                  <TwitterLogin
+                    loginUrl="/api/auth/twitter"
+                    requestTokenUrl="/api/auth/twitter/reverse"
+                    onSuccess={this.twitterResponse}
+                    onFailure={this.onFailure}
+                    style={twitterButton}
+                    showIcon={false}
                   />
                 </Card>
               </Grid>
@@ -236,7 +279,13 @@ const mapStateToProps = state => ({
 
 const connected = connect(
   mapStateToProps,
-  { loginRequest, googleLoginRequest, confirmUserEmail, setUser }
+  {
+    loginRequest,
+    googleLoginRequest,
+    facebookLoginRequest,
+    confirmUserEmail,
+    setUser
+  }
 )(withStyles(styles)(Login));
 
 const formed = reduxForm({

@@ -33,6 +33,11 @@ module.exports = function(app) {
     passport.authenticate("twitter-token"),
     AuthenticationController.login
   );
+  authRoutes.post(
+    "/facebook",
+    passport.authenticate("facebook-token"),
+    AuthenticationController.login
+  );
 
   app.use("/api", apiRoutes);
   apiRoutes.get("/search", ApiController.searchYelp);

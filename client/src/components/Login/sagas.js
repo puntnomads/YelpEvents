@@ -12,6 +12,7 @@ import type {
 import {
   LOGIN_REQUESTING,
   GOOGLE_LOGIN_REQUESTING,
+  FACEBOOK_LOGIN_REQUESTING,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   CONFIRM_USER_EMAIL_REQUESTING
@@ -20,6 +21,7 @@ import { setUser } from "../User/actions";
 
 const loginUrl = "/api/auth/login";
 const googleLoginUrl = "/api/auth/google";
+const facebookLoginUrl = "/api/auth/facebook";
 const confirmUserEmailUrl = "/api/auth/confirmation";
 
 function loginApi(values: LoginValues) {
@@ -39,6 +41,23 @@ function googleLoginApi(values) {
     body: values
   };
   return fetch(googleLoginUrl, options)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(response) {
+      return response;
+    })
+    .catch(function(error) {
+      throw error;
+    });
+}
+
+function facebookLoginApi(values) {
+  const options = {
+    method: "POST",
+    body: values
+  };
+  return fetch(facebookLoginUrl, options)
     .then(function(response) {
       return response.json();
     })
@@ -89,6 +108,20 @@ function* googleLoginFlow(action): Saga<void> {
   }
 }
 
+function* facebookLoginFlow(action): Saga<void> {
+  try {
+    yield put(showLoading());
+    const response = yield call(facebookLoginApi, action.values);
+    yield put(hideLoading());
+    yield put(setUser(response));
+    yield put({ type: LOGIN_SUCCESS });
+    //history.push("/");
+  } catch (error) {
+    yield put(hideLoading());
+    yield put({ type: LOGIN_ERROR, error });
+  }
+}
+
 function* confirmUserEmailFlow(action: ConfirmUserEmailRequest): Saga<void> {
   try {
     yield put(showLoading());
@@ -102,6 +135,7 @@ function* confirmUserEmailFlow(action: ConfirmUserEmailRequest): Saga<void> {
 function* loginWatcher(): any {
   yield takeEvery(LOGIN_REQUESTING, loginFlow);
   yield takeEvery(GOOGLE_LOGIN_REQUESTING, googleLoginFlow);
+  yield takeEvery(FACEBOOK_LOGIN_REQUESTING, facebookLoginFlow);
   yield takeEvery(CONFIRM_USER_EMAIL_REQUESTING, confirmUserEmailFlow);
 }
 

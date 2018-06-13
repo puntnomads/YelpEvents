@@ -3,6 +3,7 @@ import { showLoading, hideLoading } from "react-redux-loading-bar";
 import axios from "axios";
 //import history from "../../history";
 import type { Saga } from "redux-saga";
+import { push } from "connected-react-router";
 import type {
   LoginRequest,
   ConfirmUserEmailRequest,
@@ -87,7 +88,7 @@ function* loginFlow(action: LoginRequest): Saga<void> {
     yield put(hideLoading());
     yield put(setUser(response));
     yield put({ type: LOGIN_SUCCESS });
-    //history.push("/");
+    yield put(push("/"));
   } catch (error) {
     yield put(hideLoading());
     yield put({ type: LOGIN_ERROR, error });
@@ -101,7 +102,7 @@ function* googleLoginFlow(action): Saga<void> {
     yield put(hideLoading());
     yield put(setUser(response));
     yield put({ type: LOGIN_SUCCESS });
-    //history.push("/");
+    yield put(push("/"));
   } catch (error) {
     yield put(hideLoading());
     yield put({ type: LOGIN_ERROR, error });
@@ -115,7 +116,7 @@ function* facebookLoginFlow(action): Saga<void> {
     yield put(hideLoading());
     yield put(setUser(response));
     yield put({ type: LOGIN_SUCCESS });
-    //history.push("/");
+    yield put(push("/"));
   } catch (error) {
     yield put(hideLoading());
     yield put({ type: LOGIN_ERROR, error });

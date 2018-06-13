@@ -1,9 +1,14 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
 import { applyMiddleware, createStore, compose } from "redux";
+import {
+  connectRouter,
+  routerMiddleware,
+  ConnectedRouter
+} from "connected-react-router";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import LoadingBar from "react-redux-loading-bar";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -15,6 +20,8 @@ import "./index.css";
 
 import IndexReducer from "./index-reducer";
 import IndexSagas from "./index-sagas";
+
+const history = createBrowserHistory();
 
 const theme = createMuiTheme({
   palette: {
@@ -33,8 +40,10 @@ const composeSetup =
     : compose;
 
 const store = createStore(
-  IndexReducer,
-  composeSetup(applyMiddleware(sagaMiddleware))
+  connectRouter(history)(IndexReducer),
+  (composeSetup(
+    applyMiddleware(routerMiddleware(history), sagaMiddleware)
+  ): any)
 );
 
 sagaMiddleware.run(IndexSagas);
@@ -45,7 +54,7 @@ if (root != null) {
   ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
-        <BrowserRouter>
+        <ConnectedRouter history={history}>
           <Fragment>
             <LoadingBar
               showFastActions
@@ -60,7 +69,7 @@ if (root != null) {
             <CssBaseline />
             <Main />
           </Fragment>
-        </BrowserRouter>
+        </ConnectedRouter>
       </Provider>
     </MuiThemeProvider>,
     root

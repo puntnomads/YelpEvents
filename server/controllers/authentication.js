@@ -10,8 +10,8 @@ const jwt = require("jsonwebtoken"),
 sgMail.setApiKey(config.sendGrid_api_key);
 
 const reCaptcha = new reCAPTCHA({
-  siteKey: config.siteKey,
-  secretKey: config.secretKey
+  siteKey: config.googleRecaptchaSiteKey,
+  secretKey: config.googleRecaptchaSecretKey
 });
 
 const generateResetToken = (length = 24) => {

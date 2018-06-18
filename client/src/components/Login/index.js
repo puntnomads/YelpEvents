@@ -10,6 +10,7 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import NavBar from "../NavBar";
 import FormTextField from "../Lib/FormTextField";
+import ForgotPassword from "../ForgotPassword";
 import {
   loginRequest,
   googleLoginRequest,
@@ -22,7 +23,7 @@ import type { InputProps } from "redux-form";
 
 const styles = theme => ({
   root: {
-    height: "100%",
+    height: "950px",
     textAlign: "center"
   },
   flex: {
@@ -54,8 +55,8 @@ const styles = theme => ({
     width: "70%"
   },
   button: {
-    marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 4,
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2,
     width: "70%"
   },
   color: {
@@ -92,8 +93,8 @@ const twitterButton = {
   fontFamily: "Roboto",
   fontSize: "16px",
   width: "70%",
-  marginBottom: "32px",
-  marginTop: "16px"
+  marginTop: "16px",
+  marginBottom: "16px"
 };
 
 const facebookButton = {
@@ -109,7 +110,7 @@ const facebookButton = {
   fontFamily: "Roboto",
   fontSize: "16px",
   width: "70%",
-  marginTop: "32px"
+  marginTop: "16px"
 };
 
 type Props = {
@@ -216,6 +217,7 @@ class Login extends Component<Props> {
                     </Typography>
                     <FormTextField
                       classes={classes}
+                      id="email"
                       field={email}
                       label="Email"
                       type="email"
@@ -223,6 +225,7 @@ class Login extends Component<Props> {
                     <FormTextField
                       classes={classes}
                       field={password}
+                      id="password"
                       label="Password"
                       type="password"
                     />
@@ -263,6 +266,8 @@ class Login extends Component<Props> {
                     style={twitterButton}
                     showIcon={false}
                   />
+                  <hr />
+                  <ForgotPassword />
                 </Card>
               </Grid>
             </Grid>

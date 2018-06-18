@@ -127,18 +127,21 @@ class SignUp extends Component<Props> {
                     <FormTextField
                       classes={classes}
                       field={name}
+                      id="name"
                       label="Name"
                       type="name"
                     />
                     <FormTextField
                       classes={classes}
                       field={email}
+                      id="email"
                       label="Email"
                       type="email"
                     />
                     <FormTextField
                       classes={classes}
                       field={password}
+                      id="password"
                       label="Password"
                       type="password"
                     />

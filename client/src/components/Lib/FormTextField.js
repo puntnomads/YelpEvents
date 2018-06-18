@@ -8,18 +8,20 @@ type Props = {
     textField: string
   },
   field: InputProps,
+  id: string,
   label: string,
   type: string
 };
 
 const FormTextField = ({
   classes,
+  id,
   label,
   type,
   field: { touched, error, onChange }
 }: Props) => (
   <TextField
-    id={label}
+    id={id}
     label={label}
     error={touched && typeof error === "string"}
     className={classes.textField}

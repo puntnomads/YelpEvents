@@ -27,8 +27,8 @@ const localLogin = new LocalStrategy(
           error: "Your login details could not be verified. Please try again."
         });
       }
-      if (!req.user.isVerified) {
-        return res.send({
+      if (!user.isVerified) {
+        return done(null, false, {
           error: "Your login details could not be verified. Please try again."
         });
       }

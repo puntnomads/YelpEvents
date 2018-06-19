@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { reduxForm, Field } from "redux-form";
+import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { Button, Typography, withStyles, Grid, Card } from "@material-ui/core";
 import { toast } from "react-toastify";
@@ -7,7 +7,7 @@ import ReCaptcha from "react-google-recaptcha";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import FormTextField from "../Lib/FormTextField";
 import forgotPasswordRequest from "./actions";
-import type { ForgotPasswordState, ForgotPasswordValues } from "./types";
+import type { ForgotPasswordState } from "./types";
 import type { InputProps } from "redux-form";
 
 const styles = theme => ({

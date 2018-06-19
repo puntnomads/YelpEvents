@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./Home.js";
+import Home from "./Home";
 import Results from "./Results";
 import Login from "./Login";
 import ResetPassword from "./ResetPassword";
+import Logout from "./Logout";
 import SignUp from "./SignUp";
 import axiosInterceptor from "./Lib/axiosInterceptor";
 import ErrorBoundary from "./Lib/ErrorBoundary";
@@ -27,6 +28,7 @@ class Main extends Component<Props> {
               path="/reset-password/:token"
               component={ResetPassword}
             />
+            <Route exact path="/logout" component={Logout} />
             <Route exact path="/signup" component={SignUp} />
             <Route
               render={function() {

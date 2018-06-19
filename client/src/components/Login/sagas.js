@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import axios from "axios";
-//import history from "../../history";
 import type { Saga } from "redux-saga";
 import { push } from "connected-react-router";
 import type {

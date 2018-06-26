@@ -8,7 +8,8 @@ const initialSate = {
   ttl: "",
   created: "",
   name: "",
-  email: ""
+  email: "",
+  id: ""
 };
 
 const reducer = function userReducer(
@@ -23,7 +24,8 @@ const reducer = function userReducer(
         ttl: action.ttl,
         created: action.created,
         name: action.name,
-        email: action.email
+        email: action.email,
+        id: action.id
       };
 
     case USER_UNSET:
@@ -33,7 +35,8 @@ const reducer = function userReducer(
         ttl: "",
         created: "",
         name: "",
-        email: ""
+        email: "",
+        id: ""
       };
 
     default:

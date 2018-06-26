@@ -41,6 +41,7 @@ module.exports = function(app) {
 
   app.use("/api", apiRoutes);
   apiRoutes.get("/search", ApiController.searchYelp);
+  apiRoutes.post("/event", ApiController.saveEvent);
 
   app.get("*", function(req, res) {
     res.sendFile(path.resolve(__dirname + "/../client/build/index.html"));

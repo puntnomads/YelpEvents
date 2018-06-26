@@ -1,4 +1,5 @@
-const axios = require("axios"),
+const Event = require("../models/event"),
+  axios = require("axios"),
   config = require("../config/main");
 
 exports.searchYelp = async (req, res, next) => {
@@ -11,4 +12,10 @@ exports.searchYelp = async (req, res, next) => {
     headers: { Authorization: Authorization }
   });
   res.json({ results: response.data.events });
+};
+
+exports.saveEvent = async (req, res, next) => {
+  const event = new Event(req.body);
+  const newEvent = await event.save();
+  res.json({ event: newEvent, info: "Event saved" });
 };

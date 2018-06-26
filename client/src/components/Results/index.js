@@ -12,8 +12,8 @@ import {
   withStyles
 } from "@material-ui/core";
 import NavBar from "../NavBar.js";
-import type { ResultsState } from "./types";
-import { searchYelp } from "./actions";
+import type { ResultsState, EventValues } from "./types";
+import { searchYelp, saveEvent } from "./actions";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import MapWithMarkers from "../Lib/MapWithMarkers";
 
@@ -40,7 +40,8 @@ type Props = {
   location: Object,
   match: Object,
   results: ResultsState,
-  searchYelp: Function
+  searchYelp: Function,
+  saveEvent: Function
 };
 
 type State = {
@@ -57,7 +58,12 @@ class Results extends Component<Props, State> {
     markers: [],
     zoomToMarker: -1
   };
+  user = false;
   componentDidMount() {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+    }
     const query = this.props.location.search;
     this.props.searchYelp(query);
   }
@@ -109,9 +115,23 @@ class Results extends Component<Props, State> {
                             <Typography component="p">{description}</Typography>
                           </CardContent>
                           <CardActions>
-                            <Button size="small" color="primary">
-                              Going
-                            </Button>
+                            {this.user &&
+                              this.user.token && (
+                                <Button
+                                  size="small"
+                                  color="primary"
+                                  onClick={() => {
+                                    const event = results[index];
+                                    if (this.user) {
+                                      event["user"] = this.user.id;
+                                    }
+                                    this.props.saveEvent((event: EventValues));
+                                  }}
+                                >
+                                  Going
+                                </Button>
+                              )}
+
                             <Button
                               size="small"
                               color="primary"
@@ -149,7 +169,7 @@ const mapStateToProps = (state: ResultsState) => ({
 
 const connected = connect(
   mapStateToProps,
-  { searchYelp }
+  { searchYelp, saveEvent }
 )(withStyles(styles)(Results));
 
 export default connected;

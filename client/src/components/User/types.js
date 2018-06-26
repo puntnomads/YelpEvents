@@ -3,7 +3,8 @@ export type Values = {
   ttl: string,
   created: string,
   name: string,
-  email: string
+  email: string,
+  id: string
 };
 
 export type SetUser = {
@@ -12,7 +13,8 @@ export type SetUser = {
   ttl: string,
   created: string,
   name: string,
-  email: string
+  email: string,
+  id: string
 };
 
 export type UserState = {
@@ -20,5 +22,6 @@ export type UserState = {
   ttl: string,
   created: string,
   name: string,
-  email: string
+  email: string,
+  id: string
 };

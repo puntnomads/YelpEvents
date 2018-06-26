@@ -20,7 +20,6 @@ type Props = {
 class NavBar extends Component<Props> {
   toastId = 0;
   render() {
-    const { classes } = this.props;
     let user;
     const storedUser = localStorage.getItem("user");
     if (storedUser) {

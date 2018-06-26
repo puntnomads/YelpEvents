@@ -1,7 +1,10 @@
 import {
   SEARCH_YELP,
   SEARCH_YELP_SUCCESS,
-  SEARCH_YELP_ERROR
+  SEARCH_YELP_ERROR,
+  SAVE_EVENT,
+  SAVE_EVENT_SUCCESS,
+  SAVE_EVENT_ERROR
 } from "./constants";
 import type { ResultsState } from "./types";
 
@@ -9,6 +12,7 @@ type State = ResultsState;
 
 const initialState = {
   results: [],
+  event: {},
   requesting: false,
   successful: false,
   messages: [],
@@ -50,6 +54,49 @@ const reducer = function searchYelpReducer(
       };
 
     case SEARCH_YELP_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: [],
+        errors: state.errors.concat([
+          {
+            body: action.error.toString(),
+            time: new Date()
+          }
+        ])
+      };
+
+    case SAVE_EVENT:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: [
+          {
+            body: "saving event in the API",
+            time: new Date()
+          }
+        ],
+        errors: []
+      };
+
+    case SAVE_EVENT_SUCCESS:
+      return {
+        ...state,
+        event: action.event,
+        requesting: false,
+        successful: true,
+        messages: [
+          {
+            body: `successfully received event from the API.`,
+            time: new Date()
+          }
+        ],
+        errors: []
+      };
+
+    case SAVE_EVENT_ERROR:
       return {
         ...state,
         requesting: false,

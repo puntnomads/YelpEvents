@@ -47,7 +47,8 @@ exports.login = (req, res, next) => {
     ttl: 10080,
     created: new Date().toISOString(),
     name: userInfo.name,
-    email: userInfo.email
+    email: userInfo.email,
+    id: userInfo._id
   });
 };
 

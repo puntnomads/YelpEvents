@@ -12,7 +12,7 @@ import {
 } from "./actions";
 
 const searchYelpUrl = "/api/search";
-const saveEventUrl = "/api/event";
+const saveEventUrl = "/api/events";
 
 function searchYelpApi(query: string) {
   return axios

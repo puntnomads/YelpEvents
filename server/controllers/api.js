@@ -14,8 +14,21 @@ exports.searchYelp = async (req, res, next) => {
   res.json({ results: response.data.events });
 };
 
-exports.saveEvent = async (req, res, next) => {
+exports.getUserEvents = async (req, res, next) => {
+  const events = await Event.find({ user: req.params.userID });
+  res.json({ events: events });
+};
+
+exports.createEvent = async (req, res, next) => {
   const event = new Event(req.body);
   const newEvent = await event.save();
   res.json({ event: newEvent, info: "Event saved" });
+};
+
+exports.deleteEvent = async (req, res, next) => {
+  const event = await Event.findOneAndRemove({
+    id: req.query.e,
+    user: req.query.u
+  });
+  res.json({ event: event, info: "Event deleted" });
 };

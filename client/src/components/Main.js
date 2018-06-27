@@ -8,6 +8,7 @@ import Login from "./Login";
 import ResetPassword from "./ResetPassword";
 import Logout from "./Logout";
 import SignUp from "./SignUp";
+import UserEvents from "./UserEvents";
 import axiosInterceptor from "./Lib/axiosInterceptor";
 import ErrorBoundary from "./Lib/ErrorBoundary";
 import Analytics from "./Lib/Analytics";
@@ -32,6 +33,7 @@ class Main extends Component<Props> {
             />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/signup" component={Authenticated(SignUp)} />
+            <Route exact path="/events" component={Authorized(UserEvents)} />
             <Route
               render={function() {
                 return <p>Not Found</p>;

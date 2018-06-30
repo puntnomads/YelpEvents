@@ -1,14 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import DownShift from "downshift";
-import { TextField, MenuItem, Paper } from "@material-ui/core";
+import { TextField, MenuItem, Paper, withStyles } from "@material-ui/core";
 import type { InputProps } from "redux-form";
 import type { AutoCompleteState } from "./types";
 import { searchGooglePlaces } from "./actions";
 
+const styles = theme => ({
+  container: {
+    flexGrow: 1,
+    position: "relative"
+  },
+  paper: {
+    position: "absolute",
+    zIndex: 1,
+    left: 0
+  }
+});
+
 type Props = {
   classes: {
-    color: string
+    color: string,
+    container: string,
+    paper: string
   },
   field: InputProps,
   label: string,
@@ -31,7 +45,6 @@ class AutoComplete extends Component<Props, State> {
     return { cities: props.autoComplete.results };
   }
   onChange = (selectedCity: string) => {
-    console.log("selectedCity: ", selectedCity);
     const city = selectedCity.toLowerCase().split(",")[0];
     this.props.field.onChange(city);
     this.setState({ city: selectedCity });
@@ -50,7 +63,7 @@ class AutoComplete extends Component<Props, State> {
         onInputValueChange={this.onInputValueChange}
       >
         {({ getInputProps, getItemProps, isOpen }) => (
-          <div>
+          <div className={classes.container}>
             <TextField
               id={id}
               label={label}
@@ -68,7 +81,7 @@ class AutoComplete extends Component<Props, State> {
               }}
             />
             {isOpen ? (
-              <Paper square>
+              <Paper className={classes.paper} square>
                 {cities.map((city, index) => (
                   <MenuItem
                     {...getItemProps({ item: city })}
@@ -94,6 +107,6 @@ const mapStateToProps = state => ({
 const connected = connect(
   mapStateToProps,
   { searchGooglePlaces }
-)(AutoComplete);
+)(withStyles(styles)(AutoComplete));
 
 export default connected;

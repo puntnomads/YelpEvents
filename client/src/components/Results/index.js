@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { reduxForm } from "redux-form";
 import {
   List,
   Card,
@@ -12,10 +13,14 @@ import {
   withStyles
 } from "@material-ui/core";
 import NavBar from "../NavBar.js";
+import { toast } from "react-toastify";
+import type { InputProps } from "redux-form";
 import type { ResultsState, EventValues } from "./types";
 import { searchYelp, saveEvent } from "./actions";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import MapWithMarkers from "../Lib/MapWithMarkers";
+import SelectField from "../Lib/SelectField";
+import AutoComplete from "../Lib/AutoComplete";
 
 const styles = theme => ({
   root: {
@@ -28,6 +33,28 @@ const styles = theme => ({
   media: {
     height: 0,
     paddingTop: "110%"
+  },
+  flex: {
+    flex: 1
+  },
+  container: {
+    paddingRight: "10px",
+    paddingLeft: "10px"
+  },
+  body: {
+    height: "100%"
+  },
+  backgroundColor: {
+    backgroundColor: theme.palette.secondary.light
+  },
+  section: {
+    margin: "auto"
+  },
+  button: {
+    margin: theme.spacing.unit * 2
+  },
+  color: {
+    color: "black"
   }
 });
 
@@ -35,13 +62,22 @@ type Props = {
   history: Object,
   classes: {
     root: string,
-    media: string
+    media: string,
+    flex: string,
+    container: string,
+    body: string,
+    backgroundColor: string,
+    section: string,
+    button: string,
+    color: string
   },
   location: Object,
   match: Object,
   results: ResultsState,
   searchYelp: Function,
-  saveEvent: Function
+  saveEvent: Function,
+  handleSubmit: (x: any) => void,
+  fields: { category: InputProps, location: InputProps }
 };
 
 type State = {
@@ -59,6 +95,7 @@ class Results extends Component<Props, State> {
     zoomToMarker: -1
   };
   user = false;
+  toastId = 0;
   componentDidMount() {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -79,9 +116,27 @@ class Results extends Component<Props, State> {
       markers: markers
     };
   }
+  submit = values => {
+    const category = values.category;
+    const location = values.location;
+    if (category && location) {
+      this.props.searchYelp(`?category=${category}&location=${location}`);
+      this.props.history.push(
+        `/search?category=${category}&location=${location}`
+      );
+    } else {
+      if (!toast.isActive(this.toastId)) {
+        this.toastId = toast.error("Missing information", {
+          autoClose: 5000
+        });
+      }
+    }
+  };
   render() {
     const {
       classes,
+      fields: { category, location },
+      handleSubmit,
       results: { results }
     } = this.props;
     const { markers, zoomToMarker } = this.state;
@@ -90,6 +145,41 @@ class Results extends Component<Props, State> {
         <NavBar />
         <Grid container>
           <Grid item xs={12} sm={5}>
+            <form onSubmit={handleSubmit(this.submit)}>
+              <Grid container className={classes.container}>
+                <Grid item xs={12} sm={5}>
+                  <div>
+                    <SelectField
+                      id="category"
+                      classes={classes}
+                      field={category}
+                      label="Category"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                  <div>
+                    <AutoComplete
+                      id="location"
+                      classes={classes}
+                      field={location}
+                      label="City"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                  <Button
+                    variant="raised"
+                    color="primary"
+                    type="submit"
+                    size="small"
+                    className={classes.button}
+                  >
+                    Go!
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
             <List className={classes.root}>
               {results.map(({ id, name, image_url, description }, index) => {
                 return (
@@ -172,4 +262,9 @@ const connected = connect(
   { searchYelp, saveEvent }
 )(withStyles(styles)(Results));
 
-export default connected;
+const formed = reduxForm({
+  fields: ["category", "location"],
+  form: "results"
+})(connected);
+
+export default formed;

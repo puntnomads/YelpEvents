@@ -51,9 +51,6 @@ type State = {
 };
 
 class Home extends Component<Props, State> {
-  state = {
-    category: ""
-  };
   toastId = 0;
   submit = values => {
     const category = values.category;
@@ -69,7 +66,6 @@ class Home extends Component<Props, State> {
         });
       }
     }
-    console.log(values);
   };
   render() {
     const {

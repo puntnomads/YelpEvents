@@ -11,6 +11,7 @@ import {
   Grid,
   withStyles
 } from "@material-ui/core";
+import moment from "moment";
 import NavBar from "../NavBar.js";
 import type { EventsState, EventValues } from "./types";
 import { getEvents, deleteEvent } from "./actions";
@@ -90,67 +91,84 @@ class UserEvents extends Component<Props, State> {
         <Grid container>
           <Grid item xs={12} sm={5}>
             <List className={classes.root}>
-              {events.map(({ id, name, image_url, description }, index) => {
-                return (
-                  <li key={id}>
-                    <Card>
-                      <Grid container>
-                        <Grid item xs={4}>
-                          <CardMedia
-                            className={classes.media}
-                            image={image_url}
-                            title="image"
-                          />
-                        </Grid>
-                        <Grid item xs={8}>
-                          <CardContent>
-                            <Typography
-                              gutterBottom
-                              variant="headline"
-                              component="h2"
-                            >
-                              {name}
-                            </Typography>
-                            <Typography component="p">{description}</Typography>
-                          </CardContent>
-                          <CardActions>
-                            {this.user &&
-                              this.user.token && (
-                                <Button
-                                  size="small"
-                                  color="primary"
-                                  onClick={() => {
-                                    const event = events[index];
-                                    if (this.user) {
-                                      this.props.deleteEvent(
-                                        (event.id: string),
-                                        (this.user.id: string)
-                                      );
-                                    }
-                                  }}
-                                >
-                                  Delete
-                                </Button>
-                              )}
+              {events.map(
+                (
+                  { id, name, image_url, description, time_start, time_end },
+                  index
+                ) => {
+                  return (
+                    <li key={id}>
+                      <Card>
+                        <Grid container>
+                          <Grid item xs={4}>
+                            <CardMedia
+                              className={classes.media}
+                              image={image_url}
+                              title="image"
+                            />
+                          </Grid>
+                          <Grid item xs={8}>
+                            <CardContent>
+                              <Typography
+                                gutterBottom
+                                variant="headline"
+                                component="h2"
+                              >
+                                {name}
+                              </Typography>
+                              <Typography gutterBottom component="p">
+                                {description}
+                              </Typography>
+                              <Typography component="p">
+                                Starts:{" "}
+                                {moment(time_start).format(
+                                  "Do MMMM YYYY h:mm a"
+                                )}
+                              </Typography>
+                              <Typography component="p">
+                                Ends:{" "}
+                                {moment(time_end).format("Do MMMM YYYY h:mm a")}
+                              </Typography>
+                            </CardContent>
+                            <CardActions>
+                              {this.user &&
+                                this.user.token && (
+                                  <Button
+                                    size="small"
+                                    color="primary"
+                                    onClick={() => {
+                                      const event = events[index];
+                                      if (this.user) {
+                                        this.props.deleteEvent(
+                                          (event.id: string),
+                                          (this.user.id: string)
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    Delete
+                                  </Button>
+                                )}
 
-                            <Button
-                              size="small"
-                              color="primary"
-                              onClick={() => {
-                                this.setState({
-                                  zoomToMarker: index
-                                });
-                              }}
-                            >
-                              Zoom
-                            </Button>
-                          </CardActions>
+                              <Button
+                                size="small"
+                                color="primary"
+                                onClick={() => {
+                                  this.setState({
+                                    zoomToMarker: index
+                                  });
+                                }}
+                              >
+                                Zoom
+                              </Button>
+                            </CardActions>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </Card>
-                  </li>
-                );
-              })}
+                      </Card>
+                    </li>
+                  );
+                }
+              )}
             </List>
           </Grid>
           <Grid item xs={12} sm={7}>

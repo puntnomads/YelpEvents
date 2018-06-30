@@ -87,7 +87,13 @@ function* loginFlow(action: LoginRequest): Saga<void> {
     yield put(hideLoading());
     yield put(setUser(response));
     yield put({ type: LOGIN_SUCCESS });
-    yield put(push("/"));
+    const storedSearch = localStorage.getItem("search");
+    console.log("login storedSearch: ", storedSearch);
+    if (storedSearch) {
+      yield put(push("/search"));
+    } else {
+      yield put(push("/"));
+    }
   } catch (error) {
     yield put(hideLoading());
     yield put({ type: LOGIN_ERROR, error });
@@ -101,7 +107,13 @@ function* googleLoginFlow(action): Saga<void> {
     yield put(hideLoading());
     yield put(setUser(response));
     yield put({ type: LOGIN_SUCCESS });
-    yield put(push("/"));
+    const storedSearch = localStorage.getItem("search");
+    console.log("login storedSearch: ", storedSearch);
+    if (storedSearch) {
+      yield put(push("/search"));
+    } else {
+      yield put(push("/"));
+    }
   } catch (error) {
     yield put(hideLoading());
     yield put({ type: LOGIN_ERROR, error });
@@ -115,7 +127,13 @@ function* facebookLoginFlow(action): Saga<void> {
     yield put(hideLoading());
     yield put(setUser(response));
     yield put({ type: LOGIN_SUCCESS });
-    yield put(push("/"));
+    const storedSearch = localStorage.getItem("search");
+    console.log("login storedSearch: ", storedSearch);
+    if (storedSearch) {
+      yield put(push("/search"));
+    } else {
+      yield put(push("/"));
+    }
   } catch (error) {
     yield put(hideLoading());
     yield put({ type: LOGIN_ERROR, error });

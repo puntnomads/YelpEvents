@@ -102,8 +102,19 @@ class Results extends Component<Props, State> {
     if (storedUser) {
       this.user = JSON.parse(storedUser);
     }
-    const query = this.props.location.search;
-    this.props.searchYelp(query);
+    const storedSearch = localStorage.getItem("search");
+    if (storedSearch) {
+      this.props.searchYelp(storedSearch);
+      this.props.history.push(`/search${storedSearch}`);
+      localStorage.removeItem("search");
+    } else if (this.user && this.user.token) {
+      const query = this.props.location.search;
+      this.props.searchYelp(query);
+    } else {
+      const query = this.props.location.search;
+      this.props.searchYelp(query);
+      localStorage.setItem("search", query);
+    }
   }
   static getDerivedStateFromProps(props, state) {
     const markers = props.results.results.map(result => {

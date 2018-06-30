@@ -6,6 +6,7 @@ type Props = {};
 class Logout extends Component<Props> {
   componentWillMount() {
     localStorage.removeItem("user");
+    localStorage.removeItem("search");
   }
   render() {
     return <Redirect to="/" push />;

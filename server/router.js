@@ -44,6 +44,7 @@ module.exports = function(app) {
   apiRoutes.get("/events/:userID", ApiController.getUserEvents);
   apiRoutes.post("/events", ApiController.createEvent);
   apiRoutes.delete("/events", ApiController.deleteEvent);
+  apiRoutes.get("/places", ApiController.googlePlaces);
 
   app.get("*", function(req, res) {
     res.sendFile(path.resolve(__dirname + "/../client/build/index.html"));

@@ -8,6 +8,7 @@ import resetPassword from "./components/ResetPassword/reducer";
 import user from "./components/User/reducer";
 import signUp from "./components/SignUp/reducer";
 import userEvents from "./components/UserEvents/reducer";
+import autoComplete from "./components/Lib/AutoComplete/reducer";
 
 const IndexReducer = combineReducers({
   form,
@@ -18,7 +19,8 @@ const IndexReducer = combineReducers({
   resetPassword,
   user,
   signUp,
-  userEvents
+  userEvents,
+  autoComplete
 });
 
 export default IndexReducer;

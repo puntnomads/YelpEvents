@@ -4,7 +4,7 @@ import { Button, Typography, withStyles, Grid } from "@material-ui/core";
 import ErrorBoundary from "./Lib/ErrorBoundary";
 import NavBar from "./NavBar";
 import SelectField from "./Lib/SelectField";
-import SimpleTextField from "./Lib/SimpleTextField";
+import AutoComplete from "./Lib/AutoComplete";
 import { toast } from "react-toastify";
 import type { InputProps } from "redux-form";
 
@@ -112,6 +112,7 @@ class Home extends Component<Props, State> {
                         <Grid item xs={12} sm={5}>
                           <div>
                             <SelectField
+                              id="category"
                               classes={classes}
                               field={category}
                               label="Category"
@@ -120,10 +121,11 @@ class Home extends Component<Props, State> {
                         </Grid>
                         <Grid item xs={12} sm={5}>
                           <div>
-                            <SimpleTextField
+                            <AutoComplete
+                              id="location"
                               classes={classes}
                               field={location}
-                              label="Location"
+                              label="City"
                             />
                           </div>
                         </Grid>

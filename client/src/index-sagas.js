@@ -6,6 +6,7 @@ import ForgotPasswordSaga from "./components/ForgotPassword/sagas";
 import ResetPasswordSaga from "./components/ResetPassword/sagas";
 import SignUpSaga from "./components/SignUp/sagas";
 import UserEventsSaga from "./components/UserEvents/sagas";
+import AutoCompleteSaga from "./components/Lib/AutoComplete/sagas";
 
 export default function* IndexSaga(): Saga<void> {
   yield all([
@@ -14,6 +15,7 @@ export default function* IndexSaga(): Saga<void> {
     ForgotPasswordSaga(),
     ResetPasswordSaga(),
     SignUpSaga(),
-    UserEventsSaga()
+    UserEventsSaga(),
+    AutoCompleteSaga()
   ]);
 }

@@ -43,3 +43,17 @@ exports.deleteEvent = async (req, res, next) => {
   });
   res.json({ event: event, info: "Event deleted" });
 };
+
+exports.googlePlaces = async (req, res, next) => {
+  const place = req.query.place;
+  const response = await axios(
+    `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${place}&types=(cities)&key=${
+      process.env.GOOGLE_PLACES_API_KEY
+    }`
+  );
+  let results = response.data.predictions;
+  results = results.map(result => {
+    return result.description;
+  });
+  res.json({ results });
+};

@@ -9,7 +9,8 @@ type Props = {
     color: string
   },
   field: InputProps,
-  label: string
+  label: string,
+  id: string
 };
 type State = {
   category: string
@@ -29,11 +30,12 @@ class SelectField extends Component<Props, State> {
     const {
       classes,
       label,
+      id,
       field: { touched, error }
     } = this.props;
     return (
       <TextField
-        id="category"
+        id={id}
         select={true}
         style={{ width: "90%" }}
         label={label}

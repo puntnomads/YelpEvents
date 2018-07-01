@@ -160,7 +160,7 @@ class Login extends Component<Props> {
     this.props.loginRequest(values);
   };
   onFailure = error => {
-    alert(error);
+    console.log(error);
   };
   googleResponse = response => {
     const values = new Blob(

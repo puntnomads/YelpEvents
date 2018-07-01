@@ -20,7 +20,7 @@ import type { ResultsState, EventValues } from "./types";
 import { searchYelp, saveEvent } from "./actions";
 import ErrorBoundary from "../Lib/ErrorBoundary";
 import MapWithMarkers from "../Lib/MapWithMarkers";
-import SelectField from "../Lib/SelectField";
+import SelectField from "../Lib/selectField";
 import AutoComplete from "../Lib/AutoComplete";
 
 const styles = theme => ({

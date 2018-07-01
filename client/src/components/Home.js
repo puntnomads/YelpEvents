@@ -3,7 +3,7 @@ import { reduxForm } from "redux-form";
 import { Button, Typography, withStyles, Grid } from "@material-ui/core";
 import ErrorBoundary from "./Lib/ErrorBoundary";
 import NavBar from "./NavBar";
-import SelectField from "./Lib/SelectField";
+import SelectField from "./Lib/selectField";
 import AutoComplete from "./Lib/AutoComplete";
 import { toast } from "react-toastify";
 import type { InputProps } from "redux-form";

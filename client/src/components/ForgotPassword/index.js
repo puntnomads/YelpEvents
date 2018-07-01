@@ -128,7 +128,7 @@ class ForgotPassword extends Component<Props> {
           />
           <ReCaptcha
             ref="recaptcha"
-            sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
+            sitekey="6LfoqWEUAAAAAHXoIBDQyxJTv2FHuK67A2v6oLyk"
             onChange={this.getRecaptchaValue}
           />
           <Button

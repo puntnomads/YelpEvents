@@ -17,5 +17,6 @@ module.exports = {
   facebook: {
     clientID: process.env.FACEBOOK_AUTH_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_AUTH_CLIENT_SECRET
-  }
+  },
+  googlePlacesAPIKey: process.env.GOOGLE_PLACES_API_KEY
 };

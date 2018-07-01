@@ -48,7 +48,7 @@ exports.googlePlaces = async (req, res, next) => {
   const place = req.query.place;
   const response = await axios(
     `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${place}&types=(cities)&key=${
-      process.env.GOOGLE_PLACES_API_KEY
+      config.googlePlacesAPIKey
     }`
   );
   let results = response.data.predictions;

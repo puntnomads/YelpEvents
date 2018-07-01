@@ -9,7 +9,7 @@
     "downshift": "^2.0.10",
     "history": "^4.7.2",
     "moment": "^2.22.2",
-    "query-string": "^6.1.0",
+    "query-string": "^5.1.1",
     "react": "^16.4.0",
     "react-async-script": "^0.9.1",
     "react-dom": "^16.4.0",

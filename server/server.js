@@ -16,7 +16,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 const server = app.listen(config.port);
 console.log("Your server is running on port " + config.port + ".");
 
-app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

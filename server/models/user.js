@@ -1,6 +1,6 @@
 const mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  bcrypt = require("bcrypt-as-promised");
+  bcrypt = require("bcrypt");
 
 const UserSchema = new Schema(
   {

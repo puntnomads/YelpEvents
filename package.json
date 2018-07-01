@@ -7,7 +7,7 @@
     "client": "cd client && npm start",
     "server": "cd server && nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "cd server && npm install -g node-gyp && npm install && node server.js",
+    "start": "cd server && npm install && node server.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "engines": {
